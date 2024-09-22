@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Adicionar Usuario</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container mt-5">
+        <h1 class="mb-4">Adicionar Usuario</h1>
+        <form action="/users/add" method="POST">
+            <div class="mb-3">
+                <label for="name" class="form-label">Nome</label>
+                <input type="text" id="name" name="name" placeholder="Digite seu nome" class="form-control" required>
+                <label for="name" class="form-label" >E-mail</label>
+                <input type="text" id="email" name="email" placeholder="Digite o email" class="form-control" required>
+                <label for="senha" class="form-label">Senha</label>
+                <input type="text" name="senha" id="senha" placeholder="Digite a senha" class="form-control" required>
+                <label for="confirmarSenha" class="form-label">Confirmação da senha</label>
+                <input type="text" name="confirmarSenha" id="confirmarSenha" placeholder="Confirme a senha" class="form-control" required>
+                <label for="name" class="form-label">Papel:</label>
+                <select name="papel" id="papel" class="form-control" required>
+                    <option value="Usuario">Usuario</option>
+                    <option value="Adminitrador" selected>Adminitrador</option>
+                </select>
+                <input type="checkbox" name="ativo" id="ativo" class="form-check-input">
+                <label for="" class="form-check-label">Ativo</label> 
+            </div>
+            <button type="submit" class="btn btn-primary">Adicionar</button>
+        </form>
+        <a href="/users" class="btn btn-secondary mt-3">Ver Usuarios</a>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
