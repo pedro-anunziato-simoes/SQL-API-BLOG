@@ -19,7 +19,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 //Categorias
 app.get('/categories', async function (req: Request, res: Response) {
-    const [rows] = await connection.query("SELECT * FROM categories");
+    const [rows] = await connection.query("SELECT id,name,DATE_FORMAT(created_at, '%d/%m/%Y %H:%i') AS created_at FROM categories");
     return res.render('categories/index', {
         categories: rows
     });
@@ -48,7 +48,8 @@ app.post("/categories/delete/:id", async function (req: Request, res: Response) 
 
 //Usuarios
 app.get("/users", async function (req: Request, res: Response) {
-    const [rows] = await connection.query("SELECT * FROM users");
+    const [rows] = await connection.query("SELECT id,name,email,papel,DATE_FORMAT(created_at, '%d/%m/%Y %H:%i') AS created_at FROM users");
+    []
     return res.render('users/index', {
         users: rows
     });
