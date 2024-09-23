@@ -29,7 +29,7 @@
                             <td><%= user.email %></td>
                             <td><%= user.papel %></td>
                             <td><%= user.created_at %></td> 
-                            <td> <a href="#" class="btn btn-primary">editar</a>
+                            <td>
                                 <form action="/users/<%= user.id %>/delete/" method="POST">
                                     <button type="submit" class="btn btn-primary">Excluir</button>
                                 </form>

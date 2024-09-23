@@ -60,26 +60,53 @@ app.get("/users/form", async function (req: Request, res: Response) {
 
 app.post("/users/add", async function(req: Request, res: Response) {
     const body = req.body;
-    if(body.senha == body.confirmarSenha){
+    if(body.senha == body.confirmarSenha)
+        {
     const insertQuery = "INSERT INTO users (name,email,senha,papel) VALUES (?,?,?,?)";
     await connection.query(insertQuery, [body.name,body.email,body.senha,body.papel,body.created_at]);
-
-    res.redirect("/users");}
-    else{
-        alert('No rows');
-        setTimeout(function() {
-           res.redirect('/users');
-        }, 1000);
+    res.redirect("/users");
+        }
+    else
+    {
+        res.redirect("/users");
     }
+    
 });
 
 app.post("/users/:id/delete/", async function (req: Request, res: Response) {
     const id = req.params.id;
     const sqlDelete = "DELETE FROM users WHERE id = ?";
     await connection.query(sqlDelete, [id]);
-
     res.redirect("/users");
 });
 
+//Login
+//Pagina de login
+app.get('/login', async function (req: Request, res: Response) {
+    return res.render('login/index');
+});
+
+//Efetuar o login
+app.post('/login/autenticar',async function (req: Request, res: Response) {
+    const {email,senha} = req.body;
+    try{
+        const [rows]: any = await connection.query(
+            'SELECT email,senha FROM users WHERE email = ? AND senha = ?', [email,senha]
+        );
+        if(rows.length > 0){
+            res.redirect('/users')
+        }else{
+            res.redirect('/login')
+        }
+    }catch (error){
+        console.error("Erro na autenticação, ",error);
+        res.redirect('/login')
+    }
+});
+
+//Blog Pagina inicial
+app.get('/', async function (req: Request, res: Response) {
+    return res.render('blog/index');
+});
 
 app.listen('3000', () => console.log("Server is listening on port 3000"));

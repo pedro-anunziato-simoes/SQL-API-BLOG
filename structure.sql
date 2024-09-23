@@ -12,3 +12,5 @@ CREATE TABLE users (
   papel VARCHAR(255) NOT NULL,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 )
+INSERT INTO users (name,email,senha,papel)
+VALUES ('administrador','admin','admin','administrador');
