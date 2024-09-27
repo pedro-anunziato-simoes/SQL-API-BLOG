@@ -9,7 +9,8 @@ CREATE TABLE users (
   email VARCHAR(255) NOT NULL,
   senha VARCHAR(255) NOT NULL,
   papel VARCHAR(255) NOT NULL,
+  fl_ativo BOOLEAN NOT NULL,
   created_at DATETIME DEFAULT CURRENT_TIMESTAMP
 );
 INSERT INTO users (name,email,senha,papel)
-VALUES ('administrador','admin','admin','administrador');
+VALUES ('administrador','admin','admin','administrador',true);
