@@ -29,22 +29,23 @@
                             <td><%= user.name %></td>
                             <td><%= user.email %></td>
                             <td><%= user.papel %></td>
-                            <td><%= user.fl_ativo ? 'desativado':'ativo'; %></td>
-                            <td><%= user.created_at %></td> 
-                            <td>
-                                <form id="deleteForm" action="/users/<%= user.id %>/delete/" method="post">
-                                    <button type="button" class="btn btn-primary" onclick="confirmDelete()">Excluir</button>
+                            <td><%= user.fl_ativo ? 'ativo':'desativado'%></td>
+                            <td><%= user.created_at %></td>
+                            <td class="d-flex">
+                                <form action="/users/delete/<%= user.id %>" method="POST">
+                                    <button type="submit" class="btn btn-primary me-2">Excluir</button>
+                                </form>
+                                <form action="/users/edit/<%= user.id %>" method="GET">
+                                    <button type="submit" class="btn btn-secondary">Editar</button>
                                 </form>
                             </td>
                         </tr>
                     <% }) %>
-
                 <%} else {%>
                 <tr>
-                    <td colspan="4">Nenhum usuário cadastrado</td>
+                    <td colspan="4">NenhumUsuario cadastrado</td>
                 </tr>
                 <% } %>
-                        </tr>
             </tbody>
         </table>
         <a href="/users/form" class="btn btn-primary mt-3">Adicionar</a>
@@ -56,6 +57,11 @@
     function confirmDelete() {
         if (confirm("Você tem certeza que deseja excluir este usuário?")) {
             document.getElementById("deleteForm").submit();
+        }
+    }
+    function confirmEdit() {
+        if (confirm("Você tem certeza que deseja editar este usuário?")) {
+            document.getElementById("editForm").submit();
         }
     }
 </script>

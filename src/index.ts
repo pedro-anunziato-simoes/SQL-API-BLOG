@@ -60,12 +60,34 @@ app.post("/categories/delete/:id", async function (req: Request, res: Response) 
   res.redirect("/categories");
 });
 
+app.get("/categories/edit/:id", async function (req: Request, res: Response){
+  const id = req.params.id;
+  const [rows] = await connection.query("SELECT id,name FROM categories WHERE id = ?",[id]);
+  const categorie = rows[0];
+  if (categorie) {
+    res.render('categories/editForm', { categorie });
+  } else {
+    res.status(404).send('Usuário não encontrado');
+  }
+})
+
+app.post('/categories/edit/:id', async (req: Request, res: Response) => {
+  const id = parseInt(req.params.id);
+  const {name} = req.body;
+  const [result] = await connection.query('UPDATE categories SET name = ? WHERE id = ?', [name,id]);
+  if (result) {
+    res.redirect('/categories');
+  } else {
+    res.status(404).send('Categoria não encontrado');
+  }
+});
+
+
 //Usuarios
 app.get("/users", async function (req: Request, res: Response) {
   const userCookie = req.cookies.user;
   if (userCookie) {
-    const user = JSON.parse(userCookie);
-    const [rows] = await connection.query("SELECT id,name,email,papel,DATE_FORMAT(created_at, '%d/%m/%Y %H:%i') AS created_at FROM users");
+    const [rows] = await connection.query("SELECT id,name,email,papel,fl_ativo,DATE_FORMAT(created_at, '%d/%m/%Y %H:%i') AS created_at FROM users");
     return res.render('users/index', {
       users: rows
     });
@@ -88,8 +110,12 @@ app.get("/users/form", async function (req: Request, res: Response) {
 app.post("/users/add", async function (req: Request, res: Response) {
   const body = req.body;
   if (body.senha == body.confirmarSenha) {
-    const fl_ativo = body.ativo ? 1 : 0;
-
+    let fl_ativo
+    if(body.ativo){
+      fl_ativo = 1;
+    }else{
+      fl_ativo = 0;
+    }
     const insertQuery = "INSERT INTO users (name,email,senha,papel,fl_ativo) VALUES (?,?,?,?,?)";
     await connection.query(insertQuery, [body.name, body.email, body.senha, body.papel, fl_ativo, body.created_at]);
     res.redirect("/users");
@@ -100,12 +126,42 @@ app.post("/users/add", async function (req: Request, res: Response) {
 
 });
 
-app.post("/users/:id/delete/", async function (req: Request, res: Response) {
+app.post("/users/delete/:id", async function (req: Request, res: Response) {
   const id = req.params.id;
   const sqlDelete = "DELETE FROM users WHERE id = ?";
   await connection.query(sqlDelete, [id]);
   res.redirect("/users");
 });
+
+//Renderiza a pagina de edit de usuario
+app.get("/users/edit/:id", async function (req: Request, res: Response){
+  const id = req.params.id;
+  const [rows] = await connection.query("SELECT id,name,email,senha,papel,fl_ativo FROM users WHERE id = ?",[id]);
+  const user = rows[0];
+  if (user) {
+    res.render('users/editForm', { user });
+  } else {
+    res.status(404).send('Usuário não encontrado');
+  }
+})
+
+app.post('/users/edit/:id', async (req: Request, res: Response) => {
+  const id = parseInt(req.params.id);
+  const { name, email,papel,senha,ativo } = req.body;
+  let fl_ativo
+    if(ativo){
+      fl_ativo = 1;
+    }else{
+      fl_ativo = 0;
+    }
+  const [result] = await connection.query('UPDATE users SET name = ?, email = ?, senha = ?,papel = ?,fl_ativo = ? WHERE id = ?', [name, email,senha,papel,fl_ativo, id]);
+  if (result) {
+    res.redirect('/users');
+  } else {
+    res.status(404).send('Usuário não encontrado');
+  }
+});
+
 
 //Blog Pagina inicial
 app.get('/', async function (req: Request, res: Response) {

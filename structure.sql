@@ -12,5 +12,5 @@ CREATE TABLE users (
   fl_ativo BOOLEAN NOT NULL,
   created_at DATETIME DEFAULT CURRENT_TIMESTAMP
 );
-INSERT INTO users (name,email,senha,papel)
+INSERT INTO users (name,email,senha,papel,fl_ativo)
 VALUES ('administrador','admin','admin','administrador',true);
